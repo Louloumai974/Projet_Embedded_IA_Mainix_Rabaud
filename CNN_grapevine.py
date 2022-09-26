@@ -20,4 +20,7 @@ def load_esca_data(path):
         return (x_train, y_train) , (x_test,y_test)
 
 class dataset:
-    def _init_(self): 
+    def _init_(self):
+            with np.load('mnist.npz') as f:
+                self.x_train, self.y_train = f['x_train'], f['y_train']
+                self.x_test, self.y_test = f['x_test'], f['y_test']
