@@ -24,3 +24,5 @@ class dataset:
             with np.load('mnist.npz') as f:
                 self.x_train, self.y_train = f['x_train'], f['y_train']
                 self.x_test, self.y_test = f['x_test'], f['y_test']
+
+test
