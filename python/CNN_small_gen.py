@@ -35,9 +35,9 @@ name_model_small = os.path.join(PATH_MODELS, 'model_small_b32.h5')
 
 batch_size = 32
  
-nb_train_samples = 14868
-nb_validation_samples = 3717
-nb_test_samples = 6195
+nb_train_samples = 17346
+nb_validation_samples = 4956
+nb_test_samples = 2478
  
 n_class = 2
  
