@@ -4,7 +4,7 @@
 Annotations pour dev: 
     trois fichiers h5 -< small large et medium -> lequel choisir pour le mettre sur le stm32. 
     
-## Table of contents
+## Table des matières
 * [General info](#general-info)
 * [Technologies](#technologies)
 * [Setup](#setup)
