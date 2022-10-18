@@ -9,8 +9,13 @@ Annotations pour dev:
 * [Technologies](#technologies)
 * [Setup](#setup)
 
+## Introduction
+
+L'Esca est l'une des maladies les plus courantes qui peuvent gravement endommager la vigne. Cette maladie, si elle n'est pas traitée à temps, est la cause du stress végétatif ou de la mort de la plante attaquée, avec pour conséquence des pertes de production ainsi qu'un risque croissant de propagation aux vignes voisines. Aujourd'hui, la détection de l'Esca est effectuée manuellement par des enquêtes visuelles généralement réalisées par des agronomes, ce qui demande énormément de temps.
+
+
 ## Modèle et entrainement
-This project is simple Lorem ipsum dolor generator.
+
 	
 ## Attaques
 Project is created with:
