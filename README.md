@@ -66,6 +66,7 @@ for transformation in transformation_array:
 
 	
 ## Attaques
+Les systèmes embarqués intégrant de l'intelligence artificielle sont des sysètmes très vulnérables : il est difficile de garantir leur sécurité face aux attaques. Avant de déployer un tel système et d'y rendre dépendant une exploitation agricole, il semble alors essentiel de connaître les différents types d'attaques possibles, et les risques encourus dans ce cas. Pour cela nous allons implémenter des scripts d'attaque, en nous basant sur les attaques les plus fréquentes et les mieux connus, et y soumettre notre système. Le but est donc de tester la sécurité de notre système face aux attaques, mais aussi de connaître la réaction de notre système dans ces situations.
 * Adversarial
 * Autres attaques
 	
