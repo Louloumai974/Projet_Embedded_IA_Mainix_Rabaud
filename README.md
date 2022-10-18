@@ -28,33 +28,21 @@ La Data augmentation consiste en une série de techniques visant à améliorer l
 Script des transformations : 
 
 ```python
-for transformation in transformation_array:
-        if transformation == "horizontalFlip":
-              datagen = ImageDataGenerator(preprocessing_function=horizontal_flip) 
-        elif transformation == "verticalFlip":
-              datagen = ImageDataGenerator(preprocessing_function=vertical_flip)    
-        elif transformation == "rotation":
-              datagen = ImageDataGenerator(rotation_range = 40, fill_mode='nearest') 
-        elif transformation == "widthShift":
-              datagen = ImageDataGenerator(width_shift_range = 0.2, fill_mode='nearest')
-        elif transformation == "heightShift":
-              datagen = ImageDataGenerator(height_shift_range = 0.2, fill_mode='nearest')         
-        elif transformation == "shearRange":
-              datagen = ImageDataGenerator(shear_range = 0.2)   
-        elif transformation == "zoom":
-              datagen = ImageDataGenerator(zoom_range = [0.5, 1.0])
-        elif transformation == "blur":
-              datagen = ImageDataGenerator(preprocessing_function=blur)        
-        elif transformation == "brightness":
-              datagen = ImageDataGenerator(brightness_range = [1.1, 1.5])
-        elif transformation == "contrast": 
-              datagen = ImageDataGenerator(preprocessing_function=contrast)
-        elif transformation == "saturation": 
-              datagen = ImageDataGenerator(preprocessing_function=saturation)      
-        elif transformation == "hue": 
-              datagen = ImageDataGenerator(preprocessing_function=hue)    
-        elif transformation == "gamma": 
-              datagen = ImageDataGenerator(preprocessing_function=gamma)      
+transformation_array = [
+                        "horizontalFlip",
+                        "verticalFlip", 
+                        "rotation", 
+                        "widthShift", 
+                        "heightShift",  
+                        "shearRange",
+                        "zoom", 
+                        "blur",
+                        "brightness", 
+                        "contrast",
+                        "saturation",
+                        "hue",
+                        "gamma"
+                        ];  
 ```
 
 * Modèles
