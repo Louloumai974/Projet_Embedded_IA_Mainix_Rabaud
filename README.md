@@ -24,7 +24,7 @@ Le jeu de données proposé consiste en une archive de 1770 images. Les images a
 
 * Data Augmentation
 
-La Data augmentation consiste en une série de techniques visant à améliorer la taille et la qualité des ensembles de données d'entraînement, de manière à pouvoir construire des modèles d'apprentissage profond plus précis. 
+La Data augmentation consiste en une série de techniques visant à améliorer la taille et la qualité des ensembles de données d'entraînement, de manière à pouvoir construire des modèles d'apprentissage profond plus précis. On compte 13 transformation différentes appliqué sur chaque image ce qui permet d'augmenter drastiquement le nombres de données d'entrainement. 
 
 ```python
 for transformation in transformation_array:
