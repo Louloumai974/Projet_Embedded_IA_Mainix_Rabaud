@@ -19,9 +19,11 @@ Récemment, les méthodes de traitement d'images, de vision par ordinateur et d'
 
 ## Modèle et entrainement
 * Description des données
+
 Le jeu de données proposé consiste en une archive de 1770 images. Les images acquises ont une résolution de 1920x1080 pixels et 1280x720 pixels, avec une orientation aléatoire en portrait et en paysage.
 
 * Data Augmentation
+
 La Data augmentation consiste en une série de techniques visant à améliorer la taille et la qualité des ensembles de données d'entraînement, de manière à pouvoir construire des modèles d'apprentissage profond plus précis. 
 
 ```python
