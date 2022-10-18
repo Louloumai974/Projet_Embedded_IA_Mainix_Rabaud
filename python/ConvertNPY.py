@@ -100,7 +100,7 @@ print('Time taken for creating dataset of model small - train : {} sec\n'.format
 
 # Directory
 
-PATH_DATASET_IMAGE = './proecessed_esca_datset/test'
+PATH_DATASET_IMAGE = './processed_esca_dataset/test'
  
 test_esca_data_dir = os.path.join(PATH_DATASET_IMAGE, 'esca')
 test_healthy_data_dir = os.path.join(PATH_DATASET_IMAGE, 'healthy')
