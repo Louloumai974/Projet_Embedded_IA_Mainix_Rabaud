@@ -29,13 +29,10 @@ Récemment, les méthodes de traitement d'images, de vision par ordinateur et d'
 
 	
 ## Attaques
-Project is created with:
-* Lorem version: 12.3
-* Ipsum version: 2.33
-* Ament library version: 999
+* Adversarial
+* Autres attaques
 	
 ## Contraintes Embarquées 
-To run this project, install it locally using npm:
 
 
 ## Implantation
