@@ -5,8 +5,8 @@ Annotations pour dev:
     trois fichiers h5 -< small large et medium -> lequel choisir pour le mettre sur le stm32. 
     
 ## Table des matières
-* [General info](#general-info)
-* [Technologies](#technologies)
+* [Introduction](#Introduction)
+* [Modèle et entrainement](#Modèle et entrainement)
 * [Setup](#setup)
 
 ## Introduction
@@ -16,13 +16,13 @@ L'Esca est l'une des maladies les plus courantes qui peuvent gravement endommage
 Récemment, les méthodes de traitement d'images, de vision par ordinateur et d'apprentissage automatique ont été largement adoptées pour la classification des maladies des plantes. Implémenter un réseau de neurone sur un système embarqué permettrait de rendre plus rapide et pratique l'identification de la maladie.
 
 ## Modèle et entrainement
-* [Description des onnées]
+* Description des données
 
-* [Modèles]
+* Modèles
 
-* [Data Augmentation]
+* Data Augmentation
 
-* [Entrainement]
+* Entrainement
 
 
 	
