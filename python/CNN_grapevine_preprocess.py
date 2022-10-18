@@ -27,7 +27,7 @@ print("class: ", CLASS_NAMES, "\n")
 N_IMAGES = np.array([len(list(data_dir.glob(item.name+'/*.jpg'))) for item in sorted(data_dir.glob('*'))])			# number of images for class
 print("number of images for class: ", N_IMAGES, "\n")
 
-N_samples = np.array([(int(np.around(n*70/100)), int(np.around(n*20/100)), int(np.around(n*10/100))) for n in N_IMAGES])	# number of images for set (train,validation,test)
+N_samples = np.array([(int(np.around(n*60/100)), int(np.around(n*15/100)), int(np.around(n*25/100))) for n in N_IMAGES])	# number of images for set (train,validation,test)
 print("split of dataset: \n ", N_samples, "\n")
 
 
