@@ -29,11 +29,9 @@ La Data augmentation consiste en une série de techniques visant à améliorer l
 ```python
 for transformation in transformation_array:
         if transformation == "horizontalFlip":
-              #datagen = ImageDataGenerator(horizontal_flip = True)                 # for random flip
-              datagen = ImageDataGenerator(preprocessing_function=horizontal_flip)  # all imgs flipped
+              datagen = ImageDataGenerator(preprocessing_function=horizontal_flip) 
         elif transformation == "verticalFlip":
-              #datagen = ImageDataGenerator(vertical_flip = True)                   # for random flip
-              datagen = ImageDataGenerator(preprocessing_function=vertical_flip)    # all imgs flipped
+              datagen = ImageDataGenerator(preprocessing_function=vertical_flip)    
         elif transformation == "rotation":
               datagen = ImageDataGenerator(rotation_range = 40, fill_mode='nearest') 
         elif transformation == "widthShift":
@@ -47,9 +45,6 @@ for transformation in transformation_array:
         elif transformation == "blur":
               datagen = ImageDataGenerator(preprocessing_function=blur)        
         elif transformation == "brightness":
-              #Values less than 1.0 darken the image, e.g. [0.5, 1.0], 
-              #whereas values larger than 1.0 brighten the image, e.g. [1.0, 1.5], 
-              #where 1.0 has no effect on brightness.
               datagen = ImageDataGenerator(brightness_range = [1.1, 1.5])
         elif transformation == "contrast": 
               datagen = ImageDataGenerator(preprocessing_function=contrast)
