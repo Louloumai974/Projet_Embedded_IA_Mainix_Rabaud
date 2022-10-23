@@ -171,6 +171,7 @@ Quand le modèle termine son inférence, il nous renvoie son résultat et on la 
 ![Alt text](/images/resultats.PNG?raw=true "")
 
 Comme prévu, les predictions sont parfois fausses. Cela était prévisible compte tenu de notre accuracy qui était assez basse.
+Nous n'avons pas utilisé d'attaques sur notre modèle car il produit des erreurs sans attaques, l'attaquer n'est donc pas révélateur de l'efficacité de l'attaque. 
 
 ## Conclusion
 
