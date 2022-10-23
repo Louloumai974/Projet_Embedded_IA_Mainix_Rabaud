@@ -47,6 +47,7 @@ transformation_array = [
 
 * Modèles
 
+On propose trois modèles différents un small, un medium et un long. On présente ici le modèle small, qui sera celui implanté sur la carte (pour les raisons expliqué plus bas).
 ```
 _________________________________________________________________
  Layer (type)                Output Shape              Param #
@@ -103,7 +104,7 @@ _________________________________________________________________
 
 * Entrainement
 
-
+On converti nos images en arrays .npy pour pouvoir faciliter l'entrainement du modèles 
 	
 ## Attaques
 
