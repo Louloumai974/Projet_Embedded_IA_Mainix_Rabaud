@@ -107,6 +107,8 @@ _________________________________________________________________
 On converti nos images en arrays .npy pour pouvoir faciliter l'entrainement du modèles
 
 ![Alt text](/images/small_accuracy_loss.png?raw=true "")
+
+On obtient une accuracy de 0.97, ce qui est une bonne chose. Cependant, on remarque que notre modèle à une tendance à overfiter, en essayant plusieurs changements de parmètres nous n'avons pas résussi à diminuer ce chiffre, nous aurons donc un modèle asser faible. 
 	
 ## Attaques
 
@@ -121,11 +123,39 @@ Une attaque adversariale, qui peut se traduire par attaque par exemples contradi
 	
 ## Contraintes Embarquées 
 
+Nous utlisierons le modèle small car le modèle medium demande trop de mémoire à la carte. 
+
+![Alt text](/images/small_embedded.png?raw=true "")
+
+On remarque que l'accuracy à grandement diminué, ce qui s'explique par l'overtiffing remarqué plus haut.
+
 
 ## Implantation
-```
-$ cd ../lorem
-$ npm install
-$ npm start
+
+On utilise CubeMx et le pack X_Cube_AI pour générer un nouveau projet à partir de notre modèle de carte. Cela nous permet ensuite d'avoir un projet déjà configuré et de travailler uniquement sur le fichier app_x_cube_ai.c qui est notre fichier d'application. 
+
+On crée un fichier CommunicationSTM32.py qui va communiquer avec la carte via l'UART2. On va envoyer des images et recevoir en retour une prédiction. 
+La fonction MX_X_CUBE_AI_Init est la fonction appelée dans le main(), c'est le coeur de l'application car elle contient la partie de synchronisation avec le script python et c'est aussi dans cette fonction que sont appelées les focntion acquire_and_process_data et post_process qui permettent d'acquérir, traiter et renvoyer les données. 
+
+```C
+	      // Synchronisation loop
+	      while(sync == 0){
+	    	  while(ack_received != 1){
+	    		  HAL_UART_Receive(&huart2, (uint8_t *) ack, sizeof(ack), 100);
+	    		  if ((ack[0] == 's') && (ack[1] == 'y') && (ack[2] == 'n') && (ack[3] == 'c')){
+	    			  ack_received = 1;
+	    		  }
+	    		  HAL_UART_Transmit(&huart2, (uint8_t *) return_ack, sizeof(return_ack), 100);
+	    		  sync = 1;
+	    	  }
+	      }
+	      /* 1 - acquire and pre-process input data */
+	      res = acquire_and_process_data(in_data);
+	      /* 2 - process the data - call inference engine */
+	      if (res == 0)
+	        res = ai_run();
+	      /* 3- post-process the predictions */
+	      if (res == 0)
+	        res = post_process(out_data);
 ```    
     
