@@ -123,7 +123,7 @@ Une attaque adversariale, qui peut se traduire par attaque par exemples contradi
 	
 ## Contraintes Embarquées 
 
-Nous utlisierons le modèle small car le modèle medium demande trop de mémoire à la carte. 
+Nous utlisierons le modèle small car le modèle medium demande plus de RAM que la carte SMT32 peut en fournir. 
 
 ![Alt text](/images/small_embedded.png?raw=true "")
 
