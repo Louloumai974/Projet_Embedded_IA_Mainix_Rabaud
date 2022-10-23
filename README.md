@@ -138,7 +138,7 @@ On crée un fichier CommunicationSTM32.py qui va communiquer avec la carte via l
 La fonction MX_X_CUBE_AI_Init est la fonction appelée dans le main(), c'est le coeur de l'application car elle contient la partie de synchronisation avec le script python et c'est aussi dans cette fonction que sont appelées les focntion acquire_and_process_data et post_process qui permettent d'acquérir, traiter et renvoyer les données. 
 
 ```C
-	      // Synchronisation loop
+	    // Synchronisation loop
 	      while(sync == 0){
 	    	  while(ack_received != 1){
 	    		  HAL_UART_Receive(&huart2, (uint8_t *) ack, sizeof(ack), 100);
@@ -158,4 +158,23 @@ La fonction MX_X_CUBE_AI_Init est la fonction appelée dans le main(), c'est le 
 	      if (res == 0)
 	        res = post_process(out_data);
 ```    
-    
+ Pour réaliser l'inference on utilise le script CommunicationSTM32.py dans lequel se trouve une boucle pour envoyer les images pixel par pixel 
+```python
+    while(input_sent == False):
+        for i in range(85):
+            for j in range(45):
+                ser.write(tmp[i,j])
+
+```
+ 
+ 
+## Résultats 
+Quand le modèle termine son inférence, il nous renvoie son résultat et on la compare avec le label pour voir la performence de notre modèle
+
+![Alt text](/images/resultats.PNG?raw=true "")
+
+Comme prévu, les predictions sont parfois fausses. Cela était prévisible compte tenu de notre accuracy qui était assez basse.
+
+## Conclusion
+
+Nous avons réussi à implanter notre modèle sur la carte et à établir une communication permettant d'envoyer une image et de récuperer une prédiction. Cependant, notre modèle n'est pas assez bien élaboré et limite nos résultats, un nouveau model est donc un axe important d'amélioration de notre projet. 
