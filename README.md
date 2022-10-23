@@ -162,6 +162,6 @@ La fonction MX_X_CUBE_AI_Init est la fonction appelée dans le main(), c'est le 
  
 ## Résultats 
 
-![Alt text](/images/resultats.png?raw=true "")
+![Alt text](/images/resultats.PNG?raw=true "")
 
 ## Conclusion
