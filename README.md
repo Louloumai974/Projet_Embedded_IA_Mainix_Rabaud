@@ -157,7 +157,8 @@ La fonction MX_X_CUBE_AI_Init est la fonction appelée dans le main(), c'est le 
 	      /* 3- post-process the predictions */
 	      if (res == 0)
 	        res = post_process(out_data);
-```    
+	
+```
  Pour réaliser l'inference on utilise le script CommunicationSTM32.py dans lequel se trouve une boucle pour envoyer les images pixel par pixel 
 ```python
     while(input_sent == False):
