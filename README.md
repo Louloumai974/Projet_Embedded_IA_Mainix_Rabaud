@@ -107,6 +107,8 @@ _________________________________________________________________
 On converti nos images en arrays .npy pour pouvoir faciliter l'entrainement du modèles
 
 ![Alt text](/images/small_accuracy_loss.png?raw=true "")
+
+On obtient une accuracy de 0.97, ce qui est une bonne chose. Cependant, on remarque que notre modèle à une tendance à overfiter, en essayant plusieurs changements de parmètres nous n'avons pas résussi à diminuer ce chiffre, nous aurons donc un modèle asser faible. 
 	
 ## Attaques
 
@@ -121,8 +123,15 @@ Une attaque adversariale, qui peut se traduire par attaque par exemples contradi
 	
 ## Contraintes Embarquées 
 
+Nous utlisierons le modèle small car le modèle medium demande trop de mémoire à la carte. 
+
 
 ## Implantation
+
+On utilise CubeMx et le pack X_Cube_AI pour générer un nouveau projet à partir de notre modèle de carte. Cela nous permet ensuite d'avoir un projet déjà configuré et de travailler uniquement sur le fichier app_x_cube_ai.c qui est notre fichier d'application. 
+
+On crée un fichier CommunicationSTM32.py qui va communiquer avec la carte via l'UART2. On va envoyer des images et recevoir en retour une prédiction. 
+
 ```
 $ cd ../lorem
 $ npm install
