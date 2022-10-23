@@ -104,7 +104,9 @@ _________________________________________________________________
 
 * Entrainement
 
-On converti nos images en arrays .npy pour pouvoir faciliter l'entrainement du modèles 
+On converti nos images en arrays .npy pour pouvoir faciliter l'entrainement du modèles
+
+![Alt text](/images/small_accuracy_loss.png?raw=true "")
 	
 ## Attaques
 
