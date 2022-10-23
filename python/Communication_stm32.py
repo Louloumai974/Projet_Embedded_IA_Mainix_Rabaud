@@ -115,7 +115,7 @@ def send_NN_inputs_to_STM32(esca_set, ser):
         sys.exit(-1)
     # Synchronisation loop
     print("hello 2")
-    synchronisation_with_target()
+    synchronisation_with_target(True)
     print("serial")
     # Send inputs to the Neural Network
     input_sent = False
@@ -152,7 +152,7 @@ if __name__ == '__main__':
 
     tf.autograph.set_verbosity(0)
     nb_inference = 10
-    with serial.Serial("COM11", 115200, timeout=1) as ser: # COM5 for H743 (nucleo) and COM6 for F411 (Nucleo)
+    with serial.Serial("COM15", 115200, timeout=1) as ser: # COM5 for H743 (nucleo) and COM6 for F411 (Nucleo)
         chrono = timer("Chrono")
 
         # Model available for board's results comparaison
