@@ -138,7 +138,7 @@ On crée un fichier CommunicationSTM32.py qui va communiquer avec la carte via l
 La fonction MX_X_CUBE_AI_Init est la fonction appelée dans le main(), c'est le coeur de l'application car elle contient la partie de synchronisation avec le script python et c'est aussi dans cette fonction que sont appelées les focntion acquire_and_process_data et post_process qui permettent d'acquérir, traiter et renvoyer les données. 
 
 ```C
-	      // Synchronisation loop
+	    // Synchronisation loop
 	      while(sync == 0){
 	    	  while(ack_received != 1){
 	    		  HAL_UART_Receive(&huart2, (uint8_t *) ack, sizeof(ack), 100);
@@ -158,4 +158,10 @@ La fonction MX_X_CUBE_AI_Init est la fonction appelée dans le main(), c'est le 
 	      if (res == 0)
 	        res = post_process(out_data);
 ```    
-    
+ 
+ 
+## Résultats 
+
+![Alt text](/images/resultats.png?raw=true "")
+
+## Conclusion
