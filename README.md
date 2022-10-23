@@ -125,6 +125,8 @@ Une attaque adversariale, qui peut se traduire par attaque par exemples contradi
 
 Nous utlisierons le modèle small car le modèle medium demande trop de mémoire à la carte. 
 
+![Alt text](/images/small_embedded.png?raw=true "")
+
 
 ## Implantation
 
