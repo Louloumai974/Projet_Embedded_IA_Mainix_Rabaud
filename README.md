@@ -47,6 +47,60 @@ transformation_array = [
 
 * Modèles
 
+```
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #
+=================================================================
+ conv2d (Conv2D)             (None, 80, 45, 32)        896
+
+ activation (Activation)     (None, 80, 45, 32)        0
+
+ max_pooling2d (MaxPooling2D  (None, 40, 22, 32)       0
+ )
+
+ conv2d_1 (Conv2D)           (None, 40, 22, 32)        9248
+
+ activation_1 (Activation)   (None, 40, 22, 32)        0
+
+ max_pooling2d_1 (MaxPooling  (None, 20, 11, 32)       0
+ 2D)
+
+ conv2d_2 (Conv2D)           (None, 20, 11, 64)        18496
+
+ activation_2 (Activation)   (None, 20, 11, 64)        0
+
+ max_pooling2d_2 (MaxPooling  (None, 10, 5, 64)        0
+ 2D)
+
+ conv2d_3 (Conv2D)           (None, 10, 5, 64)         36928
+
+ activation_3 (Activation)   (None, 10, 5, 64)         0
+
+ max_pooling2d_3 (MaxPooling  (None, 5, 2, 64)         0
+ 2D)
+
+ conv2d_4 (Conv2D)           (None, 5, 2, 32)          18464
+
+ activation_4 (Activation)   (None, 5, 2, 32)          0
+
+ max_pooling2d_4 (MaxPooling  (None, 2, 1, 32)         0
+ 2D)
+
+ flatten (Flatten)           (None, 64)                0
+
+ dense (Dense)               (None, 64)                4160
+
+ activation_5 (Activation)   (None, 64)                0
+
+ dropout (Dropout)           (None, 64)                0
+
+ dense_1 (Dense)             (None, 2)                 130
+
+ activation_6 (Activation)   (None, 2)                 0
+
+=================================================================
+```
+
 * Entrainement
 
 
