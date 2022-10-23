@@ -110,7 +110,7 @@ On converti nos images en arrays .npy pour pouvoir faciliter l'entrainement du m
 
 ![Alt text](/images/small_accuracy_loss.png?raw=true "")
 
-On obtient une accuracy de 0.97, ce qui est une bonne chose. Cependant, on remarque que notre modèle à une tendance à overfiter, en essayant plusieurs changements de parmètres nous n'avons pas résussi à diminuer ce chiffre, nous aurons donc un modèle asser faible. 
+On obtient une accuracy de 0.97, ce qui est une bonne chose. Cependant, on remarque que notre modèle à une tendance à overfiter, en essayant plusieurs changements de parmètres nous n'avons pas résussi à diminuer ce chiffre, nous aurons donc un modèle assez faible. 
 	
 ## Attaques
 
@@ -120,8 +120,6 @@ Le but est donc de tester la sécurité de notre système face aux attaques, mai
 * Adversarial
 
 Une attaque adversariale, qui peut se traduire par attaque par exemples contradictoires, est un type d'attaque qui permet à l'attaquant de mettre à mal l'intelligence artificielle par corruption des données en entrée. D'une part, l'attaque peut viser les données d'entraînement. Si les données d'entraînements sont modifiées de manière imperceptible par l'homme, l'utilisateur du système pensera alors que son système est correctement entraîné, alors que les images vus par le système lors de l'entraînement ne correspondront pas aux étiquettes associées. D'autre part, l'attaque peut viser les données pendant l'utilisation du système : par exemple une légère modification du caractère d'un panneau pourrait tromper l'IA d'une voiture autonome. 
-
-* Autres attaques
 	
 ## Contraintes Embarquées 
 
