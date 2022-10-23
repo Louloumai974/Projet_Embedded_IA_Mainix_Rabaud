@@ -127,6 +127,8 @@ Nous utlisierons le modèle small car le modèle medium demande trop de mémoire
 
 ![Alt text](/images/small_embedded.png?raw=true "")
 
+On remarque que l'accuracy à grandement diminué, ce qui s'explique par l'overtiffing remarqué plus haut.
+
 
 ## Implantation
 
@@ -134,9 +136,25 @@ On utilise CubeMx et le pack X_Cube_AI pour générer un nouveau projet à parti
 
 On crée un fichier CommunicationSTM32.py qui va communiquer avec la carte via l'UART2. On va envoyer des images et recevoir en retour une prédiction. 
 
-```
-$ cd ../lorem
-$ npm install
-$ npm start
+```C
+int acquire_and_process_data(ai_i8* data[])
+{
+	/* fill the inputs of the c-model */
+	uint8_t tmp[4] = {0};
+	float input[X][Y][3] ;
+	memset( input, 0, X*Y*sizeof(float) ) ;
+
+	int i,j,k,l;
+	for (i = 0; i < X; i++){
+		for (j = 0; j < Y; j++){
+			for(l = 0; l < 3 ; l++){
+				HAL_UART_Receive(&huart2, (uint8_t *) tmp, sizeof(tmp), 100);
+				input[i][j][l] = *(float*) &tmp;
+				for ( k = 0; k < 4; k++){
+					((uint8_t *) data)[((i*X+j+l)*4)+k] = tmp[k];
+				}
+			}
+		}
+	}
 ```    
     
