@@ -135,26 +135,27 @@ On remarque que l'accuracy à grandement diminué, ce qui s'explique par l'overt
 On utilise CubeMx et le pack X_Cube_AI pour générer un nouveau projet à partir de notre modèle de carte. Cela nous permet ensuite d'avoir un projet déjà configuré et de travailler uniquement sur le fichier app_x_cube_ai.c qui est notre fichier d'application. 
 
 On crée un fichier CommunicationSTM32.py qui va communiquer avec la carte via l'UART2. On va envoyer des images et recevoir en retour une prédiction. 
+La fonction MX_X_CUBE_AI_Init est la fonction appelée dans le main(), c'est le coeur de l'application car elle contient la partie de synchronisation avec le script python et c'est aussi dans cette fonction que sont appelées les focntion acquire_and_process_data et post_process qui permettent d'acquérir, traiter et renvoyer les données. 
 
 ```C
-int acquire_and_process_data(ai_i8* data[])
-{
-	/* fill the inputs of the c-model */
-	uint8_t tmp[4] = {0};
-	float input[X][Y][3] ;
-	memset( input, 0, X*Y*sizeof(float) ) ;
-
-	int i,j,k,l;
-	for (i = 0; i < X; i++){
-		for (j = 0; j < Y; j++){
-			for(l = 0; l < 3 ; l++){
-				HAL_UART_Receive(&huart2, (uint8_t *) tmp, sizeof(tmp), 100);
-				input[i][j][l] = *(float*) &tmp;
-				for ( k = 0; k < 4; k++){
-					((uint8_t *) data)[((i*X+j+l)*4)+k] = tmp[k];
-				}
-			}
-		}
-	}
+	      // Synchronisation loop
+	      while(sync == 0){
+	    	  while(ack_received != 1){
+	    		  HAL_UART_Receive(&huart2, (uint8_t *) ack, sizeof(ack), 100);
+	    		  if ((ack[0] == 's') && (ack[1] == 'y') && (ack[2] == 'n') && (ack[3] == 'c')){
+	    			  ack_received = 1;
+	    		  }
+	    		  HAL_UART_Transmit(&huart2, (uint8_t *) return_ack, sizeof(return_ack), 100);
+	    		  sync = 1;
+	    	  }
+	      }
+	      /* 1 - acquire and pre-process input data */
+	      res = acquire_and_process_data(in_data);
+	      /* 2 - process the data - call inference engine */
+	      if (res == 0)
+	        res = ai_run();
+	      /* 3- post-process the predictions */
+	      if (res == 0)
+	        res = post_process(out_data);
 ```    
     
