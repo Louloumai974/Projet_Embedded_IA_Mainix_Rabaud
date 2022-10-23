@@ -1,10 +1,9 @@
-
 /**
-  ******************************************************************************
+  ****************************************************************************
   * @file    app_x-cube-ai.c
   * @author  X-CUBE-AI C code generator
   * @brief   AI program body
-  ******************************************************************************
+  ****************************************************************************
   * @attention
   *
   * Copyright (c) 2022 STMicroelectronics.
@@ -14,7 +13,7 @@
   * in the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
   *
-  ******************************************************************************
+  ****************************************************************************
   */
 
  /*
@@ -40,8 +39,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 
-#if defined ( __ICCARM__ )
-#elif defined ( __CC_ARM ) || ( __GNUC__ )
+#if defined ( _ICCARM_ )
+#elif defined ( _CC_ARM ) || ( __GNUC_ )
 #endif
 
 /* System headers */
@@ -53,47 +52,50 @@
 
 #include "app_x-cube-ai.h"
 #include "main.h"
-#include "ai_datatypes_defines.h"	
-#include "esca.h"
-#include "esca_data.h"
+#include "ai_datatypes_defines.h"
+#include "network.h"
+#include "network_data.h"
 
 /* USER CODE BEGIN includes */
  extern UART_HandleTypeDef huart2;
- const int X = 85 ;
- const int Y = 45 ;
+ const int X = 45 ;
+ const int Y = 80 ;
 /* USER CODE END includes */
 
 /* IO buffers ----------------------------------------------------------------*/
 
-#if !defined(AI_ESCA_INPUTS_IN_ACTIVATIONS)
-AI_ALIGNED(4) ai_i8 data_in_1[AI_ESCA_IN_1_SIZE_BYTES];
-ai_i8* data_ins[AI_ESCA_IN_NUM] = {
+#if !defined(AI_NETWORK_INPUTS_IN_ACTIVATIONS)
+AI_ALIGNED(4) ai_i8 data_in_1[AI_NETWORK_IN_1_SIZE_BYTES];
+ai_i8* data_ins[AI_NETWORK_IN_NUM] = {
 data_in_1
 };
 #else
-ai_i8* data_ins[AI_ESCA_IN_NUM] = {
+ai_i8* data_ins[AI_NETWORK_IN_NUM] = {
 NULL
 };
 #endif
 
-#if !defined(AI_ESCA_OUTPUTS_IN_ACTIVATIONS)
-AI_ALIGNED(4) ai_i8 data_out_1[AI_ESCA_OUT_1_SIZE_BYTES];
-ai_i8* data_outs[AI_ESCA_OUT_NUM] = {
+#if !defined(AI_NETWORK_OUTPUTS_IN_ACTIVATIONS)
+AI_ALIGNED(4) ai_i8 data_out_1[AI_NETWORK_OUT_1_SIZE_BYTES];
+ai_i8* data_outs[AI_NETWORK_OUT_NUM] = {
 data_out_1
 };
 #else
-ai_i8* data_outs[AI_ESCA_OUT_NUM] = {
+ai_i8* data_outs[AI_NETWORK_OUT_NUM] = {
 NULL
 };
 #endif
 
 /* Activations buffers -------------------------------------------------------*/
 
-ai_handle data_activations0[] = {NULL};
+AI_ALIGNED(32)
+static uint8_t pool0[AI_NETWORK_DATA_ACTIVATION_1_SIZE];
+
+ai_handle data_activations0[] = {pool0};
 
 /* AI objects ----------------------------------------------------------------*/
 
-static ai_handle esca = AI_HANDLE_NULL;
+static ai_handle network = AI_HANDLE_NULL;
 
 static ai_buffer* ai_input;
 static ai_buffer* ai_output;
@@ -116,37 +118,37 @@ static int ai_boostrap(ai_handle *act_addr)
   ai_error err;
 
   /* Create and initialize an instance of the model */
-  err = ai_esca_create_and_init(&esca, act_addr, NULL);
+  err = ai_network_create_and_init(&network, act_addr, NULL);
   if (err.type != AI_ERROR_NONE) {
-    ai_log_err(err, "ai_esca_create_and_init");
+    ai_log_err(err, "ai_network_create_and_init");
     return -1;
   }
 
-  ai_input = ai_esca_inputs_get(esca, NULL);
-  ai_output = ai_esca_outputs_get(esca, NULL);
+  ai_input = ai_network_inputs_get(network, NULL);
+  ai_output = ai_network_outputs_get(network, NULL);
 
-#if defined(AI_ESCA_INPUTS_IN_ACTIVATIONS)
+#if defined(AI_NETWORK_INPUTS_IN_ACTIVATIONS)
   /*  In the case where "--allocate-inputs" option is used, memory buffer can be
    *  used from the activations buffer. This is not mandatory.
    */
-  for (int idx=0; idx < AI_ESCA_IN_NUM; idx++) {
+  for (int idx=0; idx < AI_NETWORK_IN_NUM; idx++) {
 	data_ins[idx] = ai_input[idx].data;
   }
 #else
-  for (int idx=0; idx < AI_ESCA_IN_NUM; idx++) {
+  for (int idx=0; idx < AI_NETWORK_IN_NUM; idx++) {
 	  ai_input[idx].data = data_ins[idx];
   }
 #endif
 
-#if defined(AI_ESCA_OUTPUTS_IN_ACTIVATIONS)
+#if defined(AI_NETWORK_OUTPUTS_IN_ACTIVATIONS)
   /*  In the case where "--allocate-outputs" option is used, memory buffer can be
    *  used from the activations buffer. This is no mandatory.
    */
-  for (int idx=0; idx < AI_ESCA_OUT_NUM; idx++) {
+  for (int idx=0; idx < AI_NETWORK_OUT_NUM; idx++) {
 	data_outs[idx] = ai_output[idx].data;
   }
 #else
-  for (int idx=0; idx < AI_ESCA_OUT_NUM; idx++) {
+  for (int idx=0; idx < AI_NETWORK_OUT_NUM; idx++) {
 	ai_output[idx].data = data_outs[idx];
   }
 #endif
@@ -158,10 +160,10 @@ static int ai_run(void)
 {
   ai_i32 batch;
 
-  batch = ai_esca_run(esca, ai_input, ai_output);
+  batch = ai_network_run(network, ai_input, ai_output);
   if (batch != 1) {
-    ai_log_err(ai_esca_get_error(esca),
-        "ai_esca_run");
+    ai_log_err(ai_network_get_error(network),
+        "ai_network_run");
     return -1;
   }
 
@@ -173,26 +175,25 @@ int acquire_and_process_data(ai_i8* data[])
 {
 	/* fill the inputs of the c-model */
 	uint8_t tmp[4] = {0};
-	float input[X][Y][3] ;
-	memset( input, 0, X*Y*sizeof(float) ) ;
+	float input[45][80][3] = {0} ;
 
 	int i,j,k,l;
-	for (i = 0; i < X; i++){
-		for (j = 0; j < Y; j++){
-			for(l = 0; l < 3 ; l++){
+	for (l = 0; l < 3; l++){
+		for (j = 0; j < 45; j++){
+			for(i = 0; i < 80 ; i++){
 				HAL_UART_Receive(&huart2, (uint8_t *) tmp, sizeof(tmp), 100);
-				input[i][j][l] = *(float*) &tmp;
+				input[j][i][l] = (float) &tmp;
 				for ( k = 0; k < 4; k++){
-					((uint8_t *) data)[((i*X+j+l)*4)+k] = tmp[k];
+					((uint8_t *) data)[((j*45*3+i*3+l)*4)+k] = tmp[k];
 				}
 			}
 		}
 	}
 #if _DEBUG
 
-	for(i = 0; i < X; i++){
+	for(l = 0; l < 3; l++){
 		for (j = 0; j < Y; j++){
-			for(l = 0 ; l<3; l++){
+			for(i = 0 ; i<X; i++){
 				float pixel = input[i][j][l];
 				for (k = 0; k < 4 ; k++){
 					tmp[k] = ((uint8_t *) &pixel)[k];
@@ -207,7 +208,7 @@ int acquire_and_process_data(ai_i8* data[])
 
 int post_process(ai_i8* data[])
 {
-	  /* process the predictions */
+  /* process the predictions*/
 		unsigned char output_to_be_tx[3] = "010";
 		uint8_t *output = data; // don't care about the signed value of ai_i8...
 
@@ -218,7 +219,7 @@ int post_process(ai_i8* data[])
 			for (j=0; j < 4; j++){
 				tmp[j] = output[i*4+j];
 			}
-			prob_classes[i] = *(float*) &tmp;
+			prob_classes[i] = (float) &tmp;
 		}
 
 		HAL_UART_Transmit(&huart2, (uint8_t *) output_to_be_tx, sizeof(output_to_be_tx),100);
@@ -248,58 +249,59 @@ void MX_X_CUBE_AI_Process(void)
 {
     /* USER CODE BEGIN 6 */
 	int res = -1;
-	  uint8_t *in_data = NULL;
-	  uint8_t *out_data = NULL;
+		  uint8_t *in_data = NULL;
+		  uint8_t *out_data = NULL;
 
-	  printf("TEMPLATE - run - main loop\r\n");
+		  printf("TEMPLATE - run - main loop\r\n");
 
-	  if (esca) {
+		  if (network) {
 
-	#if defined(AI_ESCA_INPUTS_IN_ACTIVATIONS)
-		  in_data = ai_input[0].data;
-	#else
-		  in_data = in_data_s;
-	#endif
+		#if defined(AI_NETWORK_INPUTS_IN_ACTIVATIONS)
+			  in_data = ai_input[0].data;
+		#else
+			  in_data = in_data_s;
+		#endif
 
-	#if defined(AI_ESCA_OUTPUTS_IN_ACTIVATIONS)
-		  out_data = ai_output[0].data;
-	#else
-		  out_data = out_data_s;
-	#endif
+		#if defined(AI_NETWORK_OUTPUTS_IN_ACTIVATIONS)
+			  out_data = ai_output[0].data;
+		#else
+			  out_data = out_data_s;
+		#endif
 
-	    do {
-	      /* 0 - Synchronisation with Python Script */
-	      unsigned char ack[4] = "0000";
-	      unsigned char return_ack[3] = "101";
-	      uint8_t sync = 0;
-	      uint8_t ack_received = 0;
+		    do {
+		      /* 0 - Synchronisation with Python Script */
+		      unsigned char ack[4] = "0000";
+		      unsigned char return_ack[3] = "101";
+		      uint8_t sync = 0;
+		      uint8_t ack_received = 0;
 
-	      // Synchronisation loop
-	      while(sync == 0){
-	    	  while(ack_received != 1){
-	    		  HAL_UART_Receive(&huart2, (uint8_t *) ack, sizeof(ack), 100);
-	    		  if ((ack[0] == 's') && (ack[1] == 'y') && (ack[2] == 'n') && (ack[3] == 'c')){
-	    			  ack_received = 1;
-	    		  }
-	    		  HAL_UART_Transmit(&huart2, (uint8_t *) return_ack, sizeof(return_ack), 100);
-	    		  sync = 1;
-	    	  }
-	      }
-	      /* 1 - acquire and pre-process input data */
-	      res = acquire_and_process_data(in_data);
-	      /* 2 - process the data - call inference engine */
-	      if (res == 0)
-	        res = ai_run();
-	      /* 3- post-process the predictions */
-	      if (res == 0)
-	        res = post_process(out_data);
-	    } while (res==0);
-	  }
+		      // Synchronisation loop
+		      while(sync == 0){
+		    	  while(ack_received != 1){
+		    		  HAL_UART_Receive(&huart2, (uint8_t *) ack, sizeof(ack), 100);
+		    		  if ((ack[0] == 's') && (ack[1] == 'y') && (ack[2] == 'n') && (ack[3] == 'c')){
+		    			  ack_received = 1;
+		    		  }
+		    		  HAL_UART_Transmit(&huart2, (uint8_t *) return_ack, sizeof(return_ack), 100);
+		    		  sync = 1;
+		    	  }
+		      }
+		      /* 1 - acquire and pre-process input data */
+		      res = acquire_and_process_data(in_data);
+		      /* 2 - process the data - call inference engine */
+		      if (res == 0)
+		        res = ai_run();
+		      /* 3- post-process the predictions */
+		      if (res == 0)
+		        res = post_process(out_data);
+		      HAL_Delay(500) ;
+		    } while (res==0);
+		  }
 
-	  if (res) {
-	    ai_error err = {AI_ERROR_INVALID_STATE, AI_ERROR_CODE_NETWORK};
-	    ai_log_err(err, "Process has FAILED");
-	  }
+		  if (res) {
+		    ai_error err = {AI_ERROR_INVALID_STATE, AI_ERROR_CODE_NETWORK};
+		    ai_log_err(err, "Process has FAILED");
+		  }
     /* USER CODE END 6 */
 }
 #ifdef __cplusplus
