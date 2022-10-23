@@ -10,6 +10,8 @@ Annotations pour dev:
 * [Attaques](#Attaques)
 * [Contraintes Embarquées](#Contraintes-Embarquées)
 * [Implantation](#Implantation)
+* [Résultats](#Résultats)
+* [Conclusion](#Conclusion)
 
 ## Introduction
 
@@ -104,7 +106,7 @@ _________________________________________________________________
 
 * Entrainement
 
-On converti nos images en arrays .npy pour pouvoir faciliter l'entrainement du modèles
+On converti nos images en arrays .npy pour pouvoir faciliter l'entrainement du modèles. Cette conversion s'effectue avec le script ConvertNPY.py
 
 ![Alt text](/images/small_accuracy_loss.png?raw=true "")
 
