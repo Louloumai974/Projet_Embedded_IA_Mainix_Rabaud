@@ -173,4 +173,8 @@ Quand le modèle termine son inférence, il nous renvoie son résultat et on la 
 
 ![Alt text](/images/resultats.PNG?raw=true "")
 
+Comme prévu, les predictions sont parfois fausses. Cela était prévisible compte tenu de notre accuracy qui était assez basse.
+
 ## Conclusion
+
+Nous avons réussi à implanter notre modèle sur la carte et à établir une communication permettant d'envoyer une image et de récuperer une prédiction. Cependant, notre modèle n'est pas assez bien élaboré et limite nos résultats, un nouveau model est donc un axe important d'amélioration de notre projet. 
