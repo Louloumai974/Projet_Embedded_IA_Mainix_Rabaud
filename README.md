@@ -22,7 +22,7 @@ Le jeu de données proposé consiste en une archive de 1770 images. Les images a
 
 * Data Augmentation
 
-La Data augmentation consiste en une série de techniques visant à améliorer la taille et la qualité des ensembles de données d'entraînement, de manière à pouvoir construire des modèles d'apprentissage profond plus précis. On compte 13 transformation différentes appliqué sur chaque image ce qui permet d'augmenter drastiquement le nombres de données d'entrainement. 
+La Data augmentation consiste en une série de techniques visant à améliorer la taille et la qualité des ensembles de données d'entraînement, de manière à pouvoir construire des modèles d'apprentissage profond plus précis. On compte 13 transformations différentes appliquées sur chaque image ce qui permet d'augmenter drastiquement le nombres de données d'entrainement. 
 Script des transformations : 
 
 ```python
@@ -45,7 +45,7 @@ transformation_array = [
 
 * Modèles
 
-On propose trois modèles différents un small, un medium et un long. On présente ici le modèle small, qui sera celui implanté sur la carte (pour les raisons expliqué plus bas).
+On propose trois modèles différents. Les différences sont au niveau de l'espace mémoire occupé, nous avons trois choix : petit modèle, modèle moyen et grand modèle. On présente ici le modèle small, qui sera celui implanté sur la carte (pour les raisons expliquées plus bas).
 ```
 _________________________________________________________________
  Layer (type)                Output Shape              Param #
@@ -102,28 +102,28 @@ _________________________________________________________________
 
 * Entrainement
 
-On converti nos images en arrays .npy pour pouvoir faciliter l'entrainement du modèles. Cette conversion s'effectue avec le script ConvertNPY.py
+On convertit nos images en arrays .npy pour pouvoir faciliter l'entrainement du modèle. Cette conversion s'effectue avec le script ConvertNPY.py
 
 ![Alt text](/images/small_accuracy_loss.png?raw=true "")
 
-On obtient une accuracy de 0.97, ce qui est une bonne chose. Cependant, on remarque que notre modèle à une tendance à overfiter, en essayant plusieurs changements de parmètres nous n'avons pas résussi à diminuer ce chiffre, nous aurons donc un modèle assez faible. 
+On obtient une accuracy de 0.97, ce qui est une bonne chose. Cependant, on remarque que notre modèle a une tendance à overfiter, en essayant plusieurs changements de paramètres nous n'avons pas résussi à diminuer ce chiffre, nous aurons donc un modèle assez faible. 
 	
 ## Attaques
 
-Les systèmes embarqués intégrant de l'intelligence artificielle sont des sysètmes très vulnérables : il est difficile de garantir leur sécurité face aux attaques. Avant de déployer un tel système et d'y rendre dépendant une exploitation agricole, il semble alors essentiel de connaître les différents types d'attaques possibles, et les risques encourus dans ce cas. Pour cela nous allons implémenter des scripts d'attaque, en nous basant sur les attaques les plus fréquentes et les mieux connus, et y soumettre notre système. 
+Les systèmes embarqués intégrant de l'intelligence artificielle sont des systèmes très vulnérables : il est difficile de garantir leur sécurité face aux attaques. Avant de déployer un tel système et d'y rendre dépendant une exploitation agricole, il semble alors essentiel de connaître les différents types d'attaques possibles, et les risques encourus dans ce cas. Pour cela nous allons implémenter des scripts d'attaque, en nous basant sur les attaques les plus fréquentes et les mieux connues, et y soumettre notre système. 
 Le but est donc de tester la sécurité de notre système face aux attaques, mais aussi de connaître la réaction de notre système dans ces situations. En effet, l'un des concepts de base de la sécurité est de prendre en compte le pire scénario possible, en attaquant nous même notre système, nous allons pouvoir nous mettre dans la situation d'un attaquant ayant par exemple un accès total aux données, et ainsi mesurer les risques encourus en cas d'un scénario "catastrophe".
 
 * Adversarial
 
-Une attaque adversariale, qui peut se traduire par attaque par exemples contradictoires, est un type d'attaque qui permet à l'attaquant de mettre à mal l'intelligence artificielle par corruption des données en entrée. D'une part, l'attaque peut viser les données d'entraînement. Si les données d'entraînements sont modifiées de manière imperceptible par l'homme, l'utilisateur du système pensera alors que son système est correctement entraîné, alors que les images vus par le système lors de l'entraînement ne correspondront pas aux étiquettes associées. D'autre part, l'attaque peut viser les données pendant l'utilisation du système : par exemple une légère modification du caractère d'un panneau pourrait tromper l'IA d'une voiture autonome. 
+Une attaque adversariale, qui peut se traduire par attaque par exemples contradictoires, est un type d'attaque qui permet à l'attaquant de mettre à mal l'intelligence artificielle par corruption des données en entrée. D'une part, l'attaque peut viser les données d'entraînement. Si les données d'entraînements sont modifiées de manière imperceptible par l'homme, l'utilisateur du système pensera alors que son système est correctement entraîné, alors que les images vues par le système lors de l'entraînement ne correspondront pas aux étiquettes associées. D'autre part, l'attaque peut viser les données pendant l'utilisation du système : par exemple une légère modification du caractère d'un panneau pourrait tromper l'IA d'une voiture autonome. 
 	
 ## Contraintes Embarquées 
 
-Nous utlisierons le modèle small car le modèle medium demande plus de RAM que la carte SMT32 peut en fournir. 
+Nous utlisierons le modèle small car le modèle medium demande plus de RAM que la carte SMT32 ne peut en fournir. 
 
 ![Alt text](/images/small_embedded.png?raw=true "")
 
-On remarque que l'accuracy à grandement diminué, ce qui s'explique par l'overtiffing remarqué plus haut.
+On remarque que l'accuracy a grandement diminué, ce qui s'explique par l'overtiffing remarqué plus haut.
 
 
 ## Implantation
@@ -131,7 +131,7 @@ On remarque que l'accuracy à grandement diminué, ce qui s'explique par l'overt
 On utilise CubeMx et le pack X_Cube_AI pour générer un nouveau projet à partir de notre modèle de carte. Cela nous permet ensuite d'avoir un projet déjà configuré et de travailler uniquement sur le fichier app_x_cube_ai.c qui est notre fichier d'application. 
 
 On crée un fichier CommunicationSTM32.py qui va communiquer avec la carte via l'UART2. On va envoyer des images et recevoir en retour une prédiction. 
-La fonction MX_X_CUBE_AI_Init est la fonction appelée dans le main(), c'est le coeur de l'application car elle contient la partie de synchronisation avec le script python et c'est aussi dans cette fonction que sont appelées les focntion acquire_and_process_data et post_process qui permettent d'acquérir, traiter et renvoyer les données. 
+La fonction MX_X_CUBE_AI_Init est la fonction appelée dans le main(), c'est le coeur de l'application car elle contient la partie de synchronisation avec le script python et c'est aussi dans cette fonction que sont appelées les fonctions acquire_and_process_data et post_process qui permettent d'acquérir, traiter et renvoyer les données. 
 
 ```C
 	    // Synchronisation loop
@@ -166,7 +166,7 @@ La fonction MX_X_CUBE_AI_Init est la fonction appelée dans le main(), c'est le 
  
  
 ## Résultats 
-Quand le modèle termine son inférence, il nous renvoie son résultat et on la compare avec le label pour voir la performence de notre modèle
+Quand le modèle termine son inférence, il nous renvoie son résultat et on le compare avec le label pour voir la performence de notre modèle.
 
 ![Alt text](/images/resultats.PNG?raw=true "")
 
@@ -175,4 +175,4 @@ Nous n'avons pas utilisé d'attaques sur notre modèle car il produit des erreur
 
 ## Conclusion
 
-Nous avons réussi à implanter notre modèle sur la carte et à établir une communication permettant d'envoyer une image et de récuperer une prédiction. Cependant, notre modèle n'est pas assez bien élaboré et limite nos résultats, un nouveau model est donc un axe important d'amélioration de notre projet. 
+Nous avons réussi à implanter notre modèle sur la carte et à établir une communication permettant d'envoyer une image et de récuperer une prédiction. Cependant, notre modèle n'est pas assez bien élaboré et limite nos résultats, un nouveau modèle est donc un axe important d'amélioration de notre projet. 
