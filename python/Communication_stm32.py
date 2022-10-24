@@ -114,9 +114,7 @@ def send_NN_inputs_to_STM32(esca_set, ser):
         print ("Error: serial connection to be used isn't opened")
         sys.exit(-1)
     # Synchronisation loop
-    print("hello 2")
     synchronisation_with_target(True)
-    print("serial")
     # Send inputs to the Neural Network
     input_sent = False
     ser.flush()
@@ -172,15 +170,11 @@ if __name__ == '__main__':
             print ("\n\n----------- Inference "+str(i)+" requested: -----------\n")
 
             t1 = esca_set(used_model)
-            print("Hello") 
             t1.set_dataset_from_xtest(path_xtest, path_ytest)
-            print("break")
             t1.pick_rand_value_from_xtest()
-            print("break2")
 
-            print ("break3\n")
+
             send_NN_inputs_to_STM32(t1, ser)
-            print("break4")
             if(t1.match_pred_label() == 1):
                 nb_error += 1
                 errored_elem.append(t1)
